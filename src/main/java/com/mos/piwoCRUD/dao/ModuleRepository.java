@@ -1,4 +1,4 @@
-package com.mos.piwoCRUD.datasource;
+package com.mos.piwoCRUD.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
