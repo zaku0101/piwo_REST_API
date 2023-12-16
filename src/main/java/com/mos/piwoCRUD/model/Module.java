@@ -1,11 +1,17 @@
 package com.mos.piwoCRUD.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
+@Entity
 public class Module {
-    private final int id;
-    private final String qr;
-    private final boolean isBroken;
+    @GeneratedValue
+    private  int id;
+    @Id
+    private  String qr;
+    private  boolean isBroken;
 
     public Module(@JsonProperty("id") int id,
                   @JsonProperty("qr") String qr,
@@ -13,6 +19,10 @@ public class Module {
         this.id = id;
         this.qr = qr;
         this.isBroken = isBroken;
+    }
+
+    public Module() {
+        super();
     }
 
     public int getId() {
