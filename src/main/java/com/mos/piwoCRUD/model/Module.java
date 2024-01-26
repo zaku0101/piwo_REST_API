@@ -1,28 +1,25 @@
 package com.mos.piwoCRUD.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name="modules")
 public class Module {
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "module_generator")
+    @Column(name = "module_id")
     private  int id;
     @Id
     private  String qr;
+    @Column(name = "is_broken")
     private  boolean isBroken;
 
-    public Module(@JsonProperty("id") int id,
-                  @JsonProperty("qr") String qr,
-                  @JsonProperty("flag") boolean isBroken) {
-        this.id = id;
-        this.qr = qr;
+    public Module(String qr, boolean b) {
+        this.qr = this.qr;
         this.isBroken = isBroken;
     }
 
     public Module() {
-        super();
+
     }
 
     public int getId() {
@@ -35,5 +32,17 @@ public class Module {
 
     public boolean isBroken() {
         return isBroken;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setQr(String qr) {
+        this.qr = qr;
+    }
+
+    public void setBroken(boolean broken) {
+        isBroken = broken;
     }
 }

@@ -1,31 +1,35 @@
 package com.mos.piwoCRUD.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 @Entity
+@Table(name ="tickets")
 public class Ticket {
-    @GeneratedValue
-    @Id
-    private  long id;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticket_generator")
+    private  long id;
+    @Lob
     private  String description;
+    @Column(name = "date_reported")
     private  Date dateReported;
 
-    public Ticket(@JsonProperty("id") int id,
-                  @JsonProperty("description") String description,
-                  @JsonProperty("date") Date dateReported) {
-        this.id = id;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "module_qr",nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Module module;
+
+    public Ticket() {
         this.description = description;
         this.dateReported = dateReported;
     }
 
-    public Ticket() {
-
-    }
 
     public long getId() {
         return id;
@@ -37,5 +41,25 @@ public class Ticket {
 
     public Date getDateReported() {
         return dateReported;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDateReported(Date dateReported) {
+        this.dateReported = dateReported;
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
     }
 }
