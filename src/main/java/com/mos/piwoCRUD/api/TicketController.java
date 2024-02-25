@@ -1,6 +1,7 @@
 package com.mos.piwoCRUD.api;
 
 import com.mos.piwoCRUD.exception.ResourceNotFoundException;
+import com.mos.piwoCRUD.model.Module;
 import com.mos.piwoCRUD.model.Ticket;
 import com.mos.piwoCRUD.repository.ModuleRepository;
 import com.mos.piwoCRUD.repository.TicketRepository;
@@ -26,13 +27,13 @@ private TicketRepository ticketRepository;
     if(!moduleRepository.existsById(qr))
         throw new ResourceNotFoundException("Not found module with given qr code: " + qr);
 
-    List<Ticket> tickets = ticketRepository.findByModuleQR(qr);
+    List<Ticket> tickets = ticketRepository.findByModule(moduleRepository.findById(qr).get());
     if(tickets.isEmpty())
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     return new ResponseEntity<>(tickets, HttpStatus.OK);
 }
 
-@PostMapping("/modules/{moduleQR/tickets}")
+@PostMapping("/modules/{moduleQR}/tickets")
     public ResponseEntity<Ticket> createTicket(@PathVariable(value = "moduleQR") String qr, @RequestBody Ticket ticketRequest) throws ResourceNotFoundException {
     Ticket ticket = moduleRepository.findById(qr).map(module -> {
         ticketRequest.setModule(module);
@@ -55,12 +56,12 @@ public ResponseEntity<HttpStatus> deleteTicket(@PathVariable("id") Long id) thro
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
-@DeleteMapping("modules/{moduleQR/tickets}")
+@DeleteMapping("modules/{moduleQR}/tickets")
     public ResponseEntity<List<Ticket>> deleteAllTicketsOfModule(@PathVariable(value = "moduleQR") String qr) throws ResourceNotFoundException {
     if(!moduleRepository.existsById(qr)){
         throw new ResourceNotFoundException("Not found module with given qr code: " + qr);
     }
-    ticketRepository.deleteByModuleQR(qr);
+    ticketRepository.deleteByModule(moduleRepository.findById(qr).get());
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

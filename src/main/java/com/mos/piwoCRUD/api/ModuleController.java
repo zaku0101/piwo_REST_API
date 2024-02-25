@@ -37,7 +37,7 @@ return new ResponseEntity<>(module, HttpStatus.OK);
 
 @PostMapping("/modules")
 public ResponseEntity<Module> createModule(@RequestBody Module module) {
-    Module savedModule = moduleRepository.save(new Module(module.getQr(), false));
+    Module savedModule = moduleRepository.save(new Module(module.getQr(),module.isBroken()));
     return new ResponseEntity<>(savedModule, HttpStatus.CREATED);
     }
 @PutMapping("/modules/{id}")
